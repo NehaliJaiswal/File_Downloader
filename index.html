@@ -1,0 +1,119 @@
+<!-- File downloader made by Nehali Jaiswal using HTML CSS & JS -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Downloader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <style>
+        *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Poppins;
+}
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: #1cd403;
+}
+.container{
+    width: 500px;
+    background: #fff;
+    border-radius: 8px;
+    padding: 21px 25px 16px;
+}
+header h1{
+    font-size: 28px;
+    font-weight: 600;
+}
+header p{
+    font-size: 18px;
+    margin-top: 6px;
+}
+form{
+    margin: 20px 0 27px;
+}
+form input{
+    width: 100%;
+    height: 60px;
+    outline: none;
+    font-size: 19px;
+    padding: 0 17px;
+    border-radius: 5px;
+    border: 1px solid #b3b2b2;
+}
+form button{
+    opacity: 0.7;
+    width: 100%;
+    border: none;
+    outline: none;
+    color: #fff;
+    background: #1cd403;
+    margin-top: 20px;
+    padding: 15px 0;
+    font-size: 17px;
+    cursor: pointer;
+    pointer-events: none;
+}
+form input:valid ~ button{
+    opacity: 1;
+    pointer-events: auto;
+}
+    
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <header>
+            <h1>File Downloader</h1>
+            <p>Paste the url of image, video or pdf to download. This tool is made by Nehali Jaiswal : )</p>
+        </header>
+        <form action="#">
+            <input type="url" placeholder="Paste  Url Here" required>
+            <button>Download File</button>
+        </form>
+    </div>
+
+    <script>
+        // JavascriptFile for Url operation
+
+const fileInput = document.querySelector("input"),
+dwnldBtn = document.querySelector("button");
+
+dwnldBtn.addEventListener("click", e => {
+    e.preventDefault();
+    dwnldBtn.innerText = "Downloading File...";
+    fetchFile(fileInput.value);
+});
+
+function fetchFile(url){
+    //fetch file & return response as blob
+    fetch(url).then(res => res.blob()).then(file => {
+        //URL.creatObjectURL creates url of passed object
+        let tempUrl = URL.createObjectURL(file);
+        let aTag = document.createElement("a");
+        aTag.href = tempUrl; //passing tempUrl in <a> tag href
+        aTag.download = url.replace(/^.*[\\\/]/,'');
+        document.body.appendChild(aTag);
+        aTag.click(); //clicking <a> Tag to download file
+        aTag.remove(); //removing <a> tag once file downloaded
+        URL.revokeObjectURL(tempUrl);
+        dwnldBtn.innerText = "Download File";
+    }).catch(() => {
+        dwnldBtn.innerText = "Download File";
+        alert("Failed to Download Please Retry :)")
+    });
+
+}
+    </script>
+</body>
+</html>
